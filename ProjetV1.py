@@ -4,14 +4,13 @@ Created on Tue Mar  2 16:53:27 2021
 
 @author: math2
 """
-
 ### Test Commit
-
 print("Bienvenue dans notre nouveau Projet")
 
+import pandas as pd
 from functools import total_ordering
-
-class Side(enum.Enum):
+from enum import Enum
+class Side(Enum):
     BUY = 0
     SELL = 1
 
@@ -26,12 +25,13 @@ class Order:
     def __eq__(self,other):
         return other and self.quantity == other.quantity and self.price == other.price
     def __lt__(self,other):
-        return other and self.price < other.price
+        if self.price == other.price and self.side == Side.SELL: #Tri en fonction des id (premier arrivé premier servi)
+            return self.cpt < other.cpt
+        else:
+            return other and self.price < other.price
     def __str__(self):
         return "%s %s@%s id=%s" % (self.side.name,self.quantity, self.price,self.cpt)
         
-
-
 class Book:
     def __init__(self,name):
         self.name = name
@@ -107,9 +107,24 @@ class Book:
                         b.quantity = 0
                             
                 self.sell_orders.remove(order)
-
-                                
-                               
+                
+    def Convert_To_DataFrame(self):
+        sellside = self.sell_orders
+        buyside = self.buy_orders
+        dfsell = pd.DataFrame([s.__dict__ for s in sellside ])
+        dfbuy = pd.DataFrame([b.__dict__ for b in buyside ])    
+        dforder = dfsell.append(dfbuy)
+        return dforder
+        
+def TestDataFrame():
+    sellside = myOb.sell_orders
+    buyside = myOb.buy_orders
+    dfsell = pd.DataFrame([s.__dict__ for s in sellside ])
+    dfbuy = pd.DataFrame([b.__dict__ for b in buyside ])
+    print(dfbuy)
+    print(dfsell)
+    dforder = dfsell.append(dfbuy)
+    print(dforder)                           
     
 def Exo1():
     myOb = Book("TEST")
@@ -127,7 +142,13 @@ def Exo1():
     myOb.Insert_order(order6)
     order6 = Order(10,12.0,Side.BUY)
     myOb.Insert_order(order6)    
+    order7 = Order(10,12.0,Side.SELL)
+    myOb.Insert_order(order7) 
+    df = myOb.Convert_To_DataFrame()
+    print(df)
     
     
 if __name__ == "__main__":
     Exo1()
+    
+    
