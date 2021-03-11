@@ -4,15 +4,17 @@ Created on Tue Mar  2 16:53:27 2021
 
 @author: math2
 """
-### Test Commit
-print("Bienvenue dans notre nouveau Projet")
-
 import pandas as pd
 from functools import total_ordering
 from enum import Enum
 class Side(Enum):
     BUY = 0
     SELL = 1
+    def __str__(self):
+        if self.value == 0:
+            return "BUY"
+        else:
+            return "SELL"
 
 class Order:
     compteur=0
@@ -104,8 +106,7 @@ class Book:
                     else:
                         q -= b.quantity
                         print("Execute",b.quantity,"at",b.price,"on", self.name)                            
-                        b.quantity = 0
-                            
+                        b.quantity = 0                            
                 self.sell_orders.remove(order)
                 
     def Convert_To_DataFrame(self):
@@ -113,18 +114,8 @@ class Book:
         buyside = self.buy_orders
         dfsell = pd.DataFrame([s.__dict__ for s in sellside ])
         dfbuy = pd.DataFrame([b.__dict__ for b in buyside ])    
-        dforder = dfsell.append(dfbuy)
+        dforder = dfsell.append(dfbuy,ignore_index=True)
         return dforder
-        
-def TestDataFrame():
-    sellside = myOb.sell_orders
-    buyside = myOb.buy_orders
-    dfsell = pd.DataFrame([s.__dict__ for s in sellside ])
-    dfbuy = pd.DataFrame([b.__dict__ for b in buyside ])
-    print(dfbuy)
-    print(dfsell)
-    dforder = dfsell.append(dfbuy)
-    print(dforder)                           
     
 def Exo1():
     myOb = Book("TEST")
@@ -146,9 +137,7 @@ def Exo1():
     myOb.Insert_order(order7) 
     df = myOb.Convert_To_DataFrame()
     print(df)
-    
-    
+        
 if __name__ == "__main__":
     Exo1()
-    
-    
+      
