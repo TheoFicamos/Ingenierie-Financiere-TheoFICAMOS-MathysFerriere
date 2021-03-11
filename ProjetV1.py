@@ -67,14 +67,14 @@ class Book:
         Book.Tri_book(self)
         Book.Affichage_book(self)
 
-    def Maximum_Buy(self):
+    def Maximum_Buy(self): #récupère la valeur maximum de vente
         maxi = 0
         for s in self.buy_orders:
             if s.price > maxi:
                 maxi = s.price
         return maxi
     
-    def Minimum_Sell(self):
+    def Minimum_Sell(self): #récupère la valeur minimum de vente
         mini = 10000000
         for s in self.sell_orders:
             if s.price < mini:
@@ -114,7 +114,7 @@ class Book:
         buyside = self.buy_orders
         dfsell = pd.DataFrame([s.__dict__ for s in sellside ])
         dfbuy = pd.DataFrame([b.__dict__ for b in buyside ])    
-        dforder = dfsell.append(dfbuy,ignore_index=True)
+        dforder = dfsell.append(dfbuy,ignore_index=True) 
         return dforder
     
 def Exo1():
