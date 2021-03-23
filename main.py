@@ -5,8 +5,8 @@ Created on Tue Mar  2 16:53:27 2021
 @author: math2
 """
 import pandas as pd
-from functools import total_ordering
 from enum import Enum
+
 class Side(Enum):
     BUY = 0
     SELL = 1
@@ -115,6 +115,7 @@ class Book:
         dfsell = pd.DataFrame([s.__dict__ for s in sellside ])
         dfbuy = pd.DataFrame([b.__dict__ for b in buyside ])    
         dforder = dfsell.append(dfbuy,ignore_index=True) 
+        dforder.drop(dforder[dforder['quantity'] == 0].index,inplace=True) #on supprime lorsque la quantité est à 0
         return dforder
     
 def Exo1():
@@ -131,10 +132,6 @@ def Exo1():
     myOb.Insert_order(order5)
     order6 = Order(10,10.0,Side.SELL)
     myOb.Insert_order(order6)
-    order6 = Order(10,12.0,Side.BUY)
-    myOb.Insert_order(order6)    
-    order7 = Order(10,12.0,Side.SELL)
-    myOb.Insert_order(order7) 
     df = myOb.Convert_To_DataFrame()
     print(df)
         
